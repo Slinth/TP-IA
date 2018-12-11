@@ -1,20 +1,20 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Taquin {
-	public Noeud[][] tab;
+public class TaquinINT {
+	public Integer[][] tab;
 	
-	public Taquin() {
-		this.tab = new Noeud[3][3];
+	public TaquinINT() {
+		this.tab = new Integer[3][3];
 		this.initialiser();
 	}
 	
-	public Taquin(Noeud[][] data) {
+	public TaquinINT(Integer[][] data) {
 		this.tab = data;
 	}
 	
-	public Taquin(Taquin t) {
-		this.tab = new Noeud[3][3];
+	public TaquinINT(TaquinINT t) {
+		this.tab = new Integer[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				this.tab[i][j] = t.tab[i][j];
@@ -43,28 +43,28 @@ public class Taquin {
 				}
 				
 				l.add(x);
-				this.tab[i][j] = new Noeud(x, i, j);
+				this.tab[i][j] = x;
 			}
 		}
 	}
 	
 	
 	/**
-	 * Renvoie le Noeud representant la case contenant 0 (i.e. case vide)
-	 * @return Noeud vide
+	 * Renvoie les indices de la case contenant 0 (i.e. case vide) sous forme d'un tableau de 2 entiers
+	 * @return
 	 */
-	public Noeud getCaseVide() {
+	public int[] getCaseVide() {
 		int i = 0, j = 0;
 		boolean trouve = false;
-		Noeud res = new Noeud(0, -1, -1);
+		int[] res = new int[2];
 		
 		while (!trouve && (i < 3)) {
 			j = 0;
 			while (!trouve && (j < 3)) {
-				if (this.tab[i][j].getValeur() == 0) {
+				if (this.tab[i][j] == 0) {
 					trouve = true;
-					res.setX(i);
-					res.setY(j);
+					res[0] = i;
+					res[1] = j;
 				} else {
 					j++;
 				}
@@ -82,7 +82,7 @@ public class Taquin {
 	 * @param j2 indice de la colonne de la case 2
 	 */
 	public void inverserCases(int i1, int j1, int i2, int j2) {
-		Noeud tmp = this.tab[i1][j1];
+		int tmp = this.tab[i1][j1];
 		this.tab[i1][j1] = this.tab[i2][j2];
 		this.tab[i2][j2] = tmp;
 	}
@@ -93,7 +93,7 @@ public class Taquin {
 	 * @param t Taquin a tester
 	 * @return true si le Taquin t est identique au Taquin this, false sinon
 	 */
-	public boolean egaux(Taquin t) {
+	public boolean egaux(TaquinINT t) {
 		return ((this.tab[0][0] == t.tab[0][0]) &&
 				(this.tab[0][1] == t.tab[0][1]) &&
 				(this.tab[0][2] == t.tab[0][2]) &&
@@ -110,53 +110,53 @@ public class Taquin {
 	 * Genere les Taquin possibles a partir du Taquin this (en fonction de la position de la case vide)
 	 * @return liste des Taquin fils du Taquin this
 	 */
-	public ArrayList<Taquin> calculerFils() {
-		ArrayList<Taquin> res = new ArrayList<Taquin>();
-		Taquin tmp;
-		Noeud vide = this.getCaseVide();
-		int x = vide.getX();
-		int y = vide.getY();
+	public ArrayList<TaquinINT> calculerFils() {
+		ArrayList<TaquinINT> res = new ArrayList<TaquinINT>();
+		TaquinINT tmp;
+		int caseVide[] = this.getCaseVide();
+		int x = caseVide[0];
+		int y = caseVide[1];
 		
 		// Si la case vide est sur la premiere ligne
 		if (x == 0) {
-			tmp = new Taquin(this);
+			tmp = new TaquinINT(this);
 			tmp.inverserCases(x, y, x+1, y);
 			res.add(tmp);
 		} else 
 			// Si la case vide est sur la derniere ligne
 			if (x == 2) {
-				tmp = new Taquin(this);
+				tmp = new TaquinINT(this);
 				tmp.inverserCases(x, y, x-1, y);
 				res.add(tmp);
 			} else
 				// Sinon
 				if (x == 1) {
-					tmp = new Taquin(this);
+					tmp = new TaquinINT(this);
 					tmp.inverserCases(x, y, x-1, y);
 					res.add(tmp);
-					tmp = new Taquin(this);
+					tmp = new TaquinINT(this);
 					tmp.inverserCases(x, y, x+1, y);
 					res.add(tmp);
 				}
 			
 		// Si la case vide est sur la premiere colonne
 		if (y == 0) {
-			tmp = new Taquin(this);
+			tmp = new TaquinINT(this);
 			tmp.inverserCases(x, y, x, y+1);
 			res.add(tmp);
 		} else
 			// Si la case vide est sur la derniere colonne
 			if (y == 2) {
-				tmp = new Taquin(this);
+				tmp = new TaquinINT(this);
 				tmp.inverserCases(x, y, x, y-1);
 				res.add(tmp);
 			} else
 				// Sinon
 				if (y == 1) {
-					tmp = new Taquin(this);
+					tmp = new TaquinINT(this);
 					tmp.inverserCases(x, y, x, y-1);
 					res.add(tmp);
-					tmp = new Taquin(this);
+					tmp = new TaquinINT(this);
 					tmp.inverserCases(x, y, x, y+1);
 					res.add(tmp);
 				}

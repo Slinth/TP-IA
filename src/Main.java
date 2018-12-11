@@ -16,6 +16,12 @@ public class Main {
 	public static void main(String[] args) {
 		Taquin t = new Taquin();
 		System.out.println(t);
-		t.getCaseVide();
+		
+		/* CALCULER FILS
+		ArrayList<Taquin> fils = t.calculerFils();
+		for(Taquin ta : fils) {
+			System.out.println("-----------\n" + ta);
+		}
+		*/
 	}
 }

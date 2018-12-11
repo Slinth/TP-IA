@@ -1,25 +1,25 @@
 
 public class Noeud{
 	/**
-	 *	Valeur de la pièce	
+	 *	Valeur de la piece	
 	 */
 	private int valeur;
 
 	/**
-	 *	Numéro de colonne de la pièce
+	 *	Numero de colonne de la piece
 	 */
 	private int x;
 
 	/**
-	 *	Numéro de ligne de la pièce
+	 *	Numero de ligne de la piece
 	 */
 	private int y;
 
 
 	/**
-	 *	Valeur de la fonction d'évaluation
+	 *	Valeur de la fonction d'evaluation
 	 *	<p>
-	 * 	L'évaluation dépends de l'heuristique choisie
+	 * 	L'evaluation depend de l'heuristique choisie
 	 *	<p>
 	 */
 	private int evaluation;
@@ -32,7 +32,6 @@ public class Noeud{
 		this.valeur = _valeur;
 		this.x = _x;
 		this.y = _y;
-		this.evaluation = NULL;
 	}
 
 
