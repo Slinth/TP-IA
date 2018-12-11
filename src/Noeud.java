@@ -41,10 +41,9 @@ public class Noeud{
 			case 1 :
 				this.evaluation = 0;
 				break;
-			//Pieces mal positionnées
+			//Pieces mal placees
 			case 2 : 
-				System.out.println("[DEBUG] Fonction getNbPieceMalPositionne() a créer dans la classe Taquin.java");
-				//this.evaluation = t.getNbPieceMalPositionne();
+				this.evaluation = t.getNbPieceMalPlacee();
 				break;
 			//Distance Manhattan
 			case 3 :

@@ -25,7 +25,7 @@ public class Main {
 		*/
 		
 		/* EST GAGNANT
-		System.out.println(t.getNbPieceMalPositionnee());
+		System.out.println(t.getNbPieceMalPlacee());
 		System.out.println(t.estGagnant());
 		*/
 	}
