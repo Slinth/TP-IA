@@ -98,8 +98,10 @@ public class Taquin {
 	 * @param t Taquin a tester
 	 * @return true si le Taquin t est identique au Taquin this, false sinon
 	 */
-	public boolean egaux(Taquin t) {
-		if (this.getNbPieceMalPlacee(t) == 0) return true;
+	public boolean equals(Object o) {
+		if (o == this) return true;
+		if (!(o instanceof Taquin)) return false;
+		if (this.getNbPieceMalPlacee((Taquin) o) == 0) return true;
 		return false;
 	}
 	
