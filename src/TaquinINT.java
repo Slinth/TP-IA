@@ -164,6 +164,22 @@ public class TaquinINT {
 		return res;
 	}
 	
+	/**
+	 * Indique si le Taquin this est gagnant
+	 * @return TRUE si this est gagnant, FALSE sinon
+	 */
+	public boolean estGagnant() {
+		return (this.tab[0][0] == 1 &&
+				this.tab[0][1] == 2 &&
+				this.tab[0][2] == 3 &&
+				this.tab[1][0] == 4 &&
+				this.tab[1][1] == 5 &&
+				this.tab[1][2] == 6 &&
+				this.tab[2][0] == 7 &&
+				this.tab[2][1] == 8 &&
+				this.tab[2][2] == 0);
+	}
+	
 	
 	public String toString() {
 		return (  "| " + this.tab[0][0] + "   " + this.tab[0][1] + "   "  + this.tab[0][2]  + " |\n"

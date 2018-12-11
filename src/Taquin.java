@@ -94,15 +94,15 @@ public class Taquin {
 	 * @return true si le Taquin t est identique au Taquin this, false sinon
 	 */
 	public boolean egaux(Taquin t) {
-		return ((this.tab[0][0] == t.tab[0][0]) &&
-				(this.tab[0][1] == t.tab[0][1]) &&
-				(this.tab[0][2] == t.tab[0][2]) &&
-				(this.tab[1][0] == t.tab[1][0]) &&
-				(this.tab[1][1] == t.tab[1][1]) &&
-				(this.tab[1][2] == t.tab[1][2]) &&
-				(this.tab[2][0] == t.tab[2][0]) &&
-				(this.tab[2][1] == t.tab[2][1]) &&
-				(this.tab[2][2] == t.tab[2][2]));
+		return ((this.tab[0][0].equals(t.tab[0][0])) &&
+				(this.tab[0][1].equals(t.tab[0][1])) &&
+				(this.tab[0][2].equals(t.tab[0][2])) &&
+				(this.tab[1][0].equals(t.tab[1][0])) &&
+				(this.tab[1][1].equals(t.tab[1][1])) &&
+				(this.tab[1][2].equals(t.tab[1][2])) &&
+				(this.tab[2][0].equals(t.tab[2][0])) &&
+				(this.tab[2][1].equals(t.tab[2][1])) &&
+				(this.tab[2][2].equals(t.tab[2][2])));
 	}
 	
 	
@@ -164,6 +164,22 @@ public class Taquin {
 		return res;
 	}
 	
+	
+	/**
+	 * Indique si le Taquin this est gagnant
+	 * @return TRUE si this est gagnant, FALSE sinon
+	 */
+	public boolean estGagnant() {
+		return (this.tab[0][0].getValeur() == 1 &&
+				this.tab[0][1].getValeur() == 2 &&
+				this.tab[0][2].getValeur() == 3 &&
+				this.tab[1][0].getValeur() == 4 &&
+				this.tab[1][1].getValeur() == 5 &&
+				this.tab[1][2].getValeur() == 6 &&
+				this.tab[2][0].getValeur() == 7 &&
+				this.tab[2][1].getValeur() == 8 &&
+				this.tab[2][2].getValeur() == 0);
+	}
 	
 	public String toString() {
 		return (  "| " + this.tab[0][0] + "   " + this.tab[0][1] + "   "  + this.tab[0][2]  + " |\n"

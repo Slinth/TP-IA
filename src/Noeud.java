@@ -80,6 +80,22 @@ public class Noeud{
 	public int getEvaluation(){
 		return this.evaluation;
 	}
+	
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+		
+		if (!(o instanceof Noeud)) {
+			return false;
+		}
+		
+		Noeud n = (Noeud) o;
+		return ((this.valeur == n.valeur) && 
+				(this.x == n.x) && (this.y == n.y) && 
+				(this.evaluation == n.evaluation));
+	}
+	
 	public String toString(){
 		return "[" + this.x + " , " + this.y + "]" + this.valeur + " " + this.evaluation;
 	}
