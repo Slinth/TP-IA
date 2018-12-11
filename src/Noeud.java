@@ -35,7 +35,22 @@ public class Noeud{
 		this.evaluation = null;
 	}
 
+	public void evaluer(int heuristique, int xFin, int yFin){
+		switch (heuristique) {
+			//Valeur = 0
+			case 1 :
+				this.evaluation = 0;
+				break;
+			//Pieces mal positionnées
+			case 2 : 
 
+				break;
+			//Distance Manhattan
+			case 3 :
+				this.evaluation =  (xFin - this.x) + (yFin - this.y);
+				break;
+		}
+	}
 
 	public void setValeur(int _valeur){
 		this.valeur = _valeur;
