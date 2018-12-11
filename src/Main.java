@@ -23,5 +23,10 @@ public class Main {
 			System.out.println("-----------\n" + ta);
 		}
 		*/
+		
+		/* EST GAGNANT
+		System.out.println(t.getNbPieceMalPositionnee());
+		System.out.println(t.estGagnant());
+		*/
 	}
 }

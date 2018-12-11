@@ -170,15 +170,45 @@ public class Taquin {
 	 * @return TRUE si this est gagnant, FALSE sinon
 	 */
 	public boolean estGagnant() {
-		return (this.tab[0][0].getValeur() == 1 &&
-				this.tab[0][1].getValeur() == 2 &&
-				this.tab[0][2].getValeur() == 3 &&
-				this.tab[1][0].getValeur() == 4 &&
-				this.tab[1][1].getValeur() == 5 &&
-				this.tab[1][2].getValeur() == 6 &&
-				this.tab[2][0].getValeur() == 7 &&
-				this.tab[2][1].getValeur() == 8 &&
-				this.tab[2][2].getValeur() == 0);
+		if (this.getNbPieceMalPlacee() == 0) return true;
+		return false;
+	}
+	
+	
+	/**
+	 * Donne le nombre de pieces mal positionnees dans le Taquin this
+	 * @return Nombre de pieces pas a leur place
+	 */
+	public int getNbPieceMalPlacee() {
+		int cpt = 0;
+		if (this.tab[0][0].getValeur() != 1) {
+			cpt++;
+		}
+		if (this.tab[0][1].getValeur() != 2) {
+			cpt++;
+		}
+		if (this.tab[0][2].getValeur() != 3) {
+			cpt++;
+		}
+		if (this.tab[1][0].getValeur() != 4) {
+			cpt++;
+		}
+		if (this.tab[1][1].getValeur() != 5) {
+			cpt++;
+		}
+		if (this.tab[1][2].getValeur() != 6) {
+			cpt++;
+		}
+		if (this.tab[2][0].getValeur() != 7) {
+			cpt++;
+		}
+		if (this.tab[2][1].getValeur() != 8) {
+			cpt++;
+		}
+		if (this.tab[2][2].getValeur() != 0) {
+			cpt++;
+		}
+		return cpt;
 	}
 	
 	public String toString() {

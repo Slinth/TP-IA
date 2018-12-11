@@ -97,7 +97,7 @@ public class Noeud{
 	}
 	
 	public String toString(){
-		return "[" + this.x + " , " + this.y + "]" + this.valeur + " " + this.evaluation;
+		return "[" + this.x + ", " + this.y + "] (" + this.valeur + ") " + this.evaluation;
 	}
 
 
