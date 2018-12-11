@@ -57,7 +57,7 @@ public class Taquin {
 	 * Renvoie la position de la case contenant l'entier valeur (passe en argument)
 	 * @return tableau de 2 entiers
 	 */
-	public int[] getPositionNoeud(int valeur) {
+	public int[] getPositionPiece(int valeur) {
 		int i = 0, j = 0;
 		boolean trouve = false;
 		int[] res = new int[2];
@@ -111,7 +111,7 @@ public class Taquin {
 	public ArrayList<Taquin> calculerFils() {
 		ArrayList<Taquin> res = new ArrayList<Taquin>();
 		Taquin tmp;
-		int pos[] = this.getPositionNoeud(0);
+		int pos[] = this.getPositionPiece(0);
 		int x = pos[0];
 		int y = pos[1];
 		
@@ -196,16 +196,14 @@ public class Taquin {
 			break;
 		//Distance Manhattan
 		case 3 :
-			/*
-			int pos[] = this.getPositionNoeud(n.getValeur());
-			int posFin[] = tFin.getPositionNoeud(n.getValeur());
-			
-			int x = pos[0];
-			int y = pos[1];
-			int xFin = posFin[0];
-			int yFin = posFin[1];
-			n.setEvaluation((xFin - x) + (yFin - y));
-			*/
+			for (int x = 0; x < this.tab.length; x++) {
+				for (int y = 0; y < this.tab.length; y++) {
+					int piece = this.tab[x][y];
+					int posFin[] = tFin.getPositionPiece(piece);
+					int eval = (posFin[0] - x) + (posFin[1] - y);
+					this.evaluation += eval;
+				}
+			}
 			break;
 		}
 	}
