@@ -92,5 +92,36 @@ public class Main {
 		System.out.println("But : \n"+tFinal+"\n");
 		
 		System.out.println(algoA(tBase,tFinal));
+		
+		/*
+		Taquin tBase = new Taquin();
+		Taquin tFinal = new Taquin();
+
+		System.out.println("Debut : \n"+tBase);
+		System.out.println("But : \n"+tFinal);
+		
+		tBase.evaluer(tFinal, 2);
+		System.out.println(tBase.evaluation);
+		
+		System.out.println(tBase.equals(tFinal));
+		System.out.println(tBase.equals(tBase));
+		
+		System.out.println("------------------");
+		
+		ArrayList<Taquin> l = new ArrayList<Taquin>();
+		Integer data[][] = {{5, 8, 4}, {1, 2, 0}, {3, 7, 6}};
+		Integer data2[][] = {{6, 8, 7}, {3, 0, 1}, {2, 5, 4}};
+		Integer data3[][] = {{1, 6, 3}, {4, 7, 2}, {0, 5, 8}};
+		
+		Taquin t = new Taquin(data2);
+
+		l.add(new Taquin(data));
+		l.add(t);
+		l.add(new Taquin(data3));
+		
+		System.out.println(l.indexOf(t));
+		System.out.println(l.get(l.indexOf(t)));
+		//System.out.println(algoA(tBase,tFinal));
+		 */
 	}
 }

@@ -194,7 +194,7 @@ public class Taquin {
 			break;
 		//Pieces mal placees
 		case 2 : 
-			this.evaluation = this.getNbPieceMalPlacee(tFin);
+			this.evaluation += this.getNbPieceMalPlacee(tFin);
 			break;
 		//Distance Manhattan
 		case 3 :
@@ -203,7 +203,7 @@ public class Taquin {
 					int piece = this.tab[x][y];
 					int posFin[] = tFin.getPositionPiece(piece);
 					int eval = (posFin[0] - x) + (posFin[1] - y);
-					this.evaluation += eval;
+					this.evaluation = eval;
 				}
 			}
 			break;
