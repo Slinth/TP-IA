@@ -35,7 +35,12 @@ public class Noeud{
 		this.evaluation = null;
 	}
 
-	public void evaluer(int heuristique, int xFin, int yFin,Taquin t){
+	public void evaluer(int heuristique,Taquin tDeb,Taquin tFin){
+		
+		//Récupération des coordonnées de destination de la pièce
+		int xFin = tFin.getNoeud(this.valeur).getX();
+		int yFin = tFin.getNoeud(this.valeur).getY();
+
 		switch (heuristique) {
 			//Valeur = 0
 			case 1 :
@@ -43,7 +48,7 @@ public class Noeud{
 				break;
 			//Pieces mal placees
 			case 2 : 
-				this.evaluation = t.getNbPieceMalPlacee();
+				this.evaluation = tDeb.getNbPieceMalPlacee();
 				break;
 			//Distance Manhattan
 			case 3 :
@@ -96,7 +101,8 @@ public class Noeud{
 	}
 	
 	public String toString(){
-		return "[" + this.x + ", " + this.y + "] (" + this.valeur + ") " + this.evaluation;
+		//return "[" + this.x + ", " + this.y + "] (" + this.valeur + ") " + this.evaluation;
+		return " "+this.valeur;
 	}
 
 
