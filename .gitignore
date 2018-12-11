@@ -2,9 +2,4 @@
 .project
 .settings/org.eclipse.jdt.core.prefs
 *.class
-*.class
-bin/Main.class
-*.class
-*.class
-*.class
-*.class
+bin/*.class
