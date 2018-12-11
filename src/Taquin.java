@@ -43,7 +43,7 @@ public class Taquin {
 				}
 				
 				l.add(x);
-				this.tab[i][j] = new Noeud(x, i, j);
+				this.tab[i][j] = new Noeud(x);
 			}
 		}
 	}
@@ -53,18 +53,18 @@ public class Taquin {
 	 * Renvoie le Noeud representant la case contenant l'entier valeur (passe en argument)
 	 * @return Noeud
 	 */
-	public Noeud getNoeud(int valeur) {
+	public int[] getPositionNoeud(int valeur) {
 		int i = 0, j = 0;
 		boolean trouve = false;
-		Noeud res = new Noeud(0, -1, -1);
+		int[] res = new int[2];
 		
 		while (!trouve && (i < 3)) {
 			j = 0;
 			while (!trouve && (j < 3)) {
 				if (this.tab[i][j].getValeur() == valeur) {
 					trouve = true;
-					res.setX(i);
-					res.setY(j);
+					res[0] = i;
+					res[1] = j;
 				} else {
 					j++;
 				}
@@ -73,6 +73,7 @@ public class Taquin {
 		}
 		return res;
 	}
+
 	
 	/**
 	 * Inverse les cases (i1,j1) et (i2,j2)
@@ -106,9 +107,9 @@ public class Taquin {
 	public ArrayList<Taquin> calculerFils() {
 		ArrayList<Taquin> res = new ArrayList<Taquin>();
 		Taquin tmp;
-		Noeud vide = this.getNoeud(0);
-		int x = vide.getX();
-		int y = vide.getY();
+		int pos[] = this.getPositionNoeud(0);
+		int x = pos[0];
+		int y = pos[1];
 		
 		// Si la case vide est sur la premiere ligne
 		if (x == 0) {
@@ -178,13 +179,36 @@ public class Taquin {
 		return cpt;
 	}
 	
-	public void miseAJour() {
+	public void evaluer(Taquin tFin, int heuristique) {
 		for (int i = 0; i < this.tab.length; i++) {
 			for (Noeud n : this.tab[i]) {
-				//n.evaluer(heuristique, xFin, yFin, t);
+				evaluerNoeud(n, tFin, heuristique);
 			}
 		}
-		
+	}
+	
+	public void evaluerNoeud(Noeud n, Taquin tFin, int heuristique) {
+		switch (heuristique) {
+		//Valeur = 0
+		case 1 :
+			n.setEvaluation(0);
+			break;
+		//Pieces mal placees
+		case 2 : 
+			n.setEvaluation(this.getNbPieceMalPlacee(tFin));
+			break;
+		//Distance Manhattan
+		case 3 :
+			int pos[] = this.getPositionNoeud(n.getValeur());
+			int posFin[] = tFin.getPositionNoeud(n.getValeur());
+			
+			int x = pos[0];
+			int y = pos[1];
+			int xFin = posFin[0];
+			int yFin = posFin[1];
+			n.setEvaluation((xFin - x) + (yFin - y));
+			break;
+		}
 	}
 	
 	public String toString() {
