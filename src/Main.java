@@ -17,12 +17,12 @@ public class Main {
 		Taquin t = new Taquin();
 		System.out.println(t);
 		
-		/* CALCULER FILS
+		/* CALCULER FILS */
 		ArrayList<Taquin> fils = t.calculerFils();
 		for(Taquin ta : fils) {
 			System.out.println("-----------\n" + ta);
 		}
-		*/
+		
 		
 		/* EST GAGNANT
 		System.out.println(t.getNbPieceMalPlacee());
