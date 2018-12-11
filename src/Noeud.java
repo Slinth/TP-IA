@@ -6,17 +6,6 @@ public class Noeud{
 	private int valeur;
 
 	/**
-	 *	Numero de colonne de la piece
-	 */
-	private int x;
-
-	/**
-	 *	Numero de ligne de la piece
-	 */
-	private int y;
-
-
-	/**
 	 *	Valeur de la fonction d'evaluation
 	 *	<p>
 	 * 	L'evaluation depend de l'heuristique choisie
@@ -28,13 +17,11 @@ public class Noeud{
 	/**
 	 *	Constructeur du Noeud
 	 */
-	public Noeud(int _valeur,int _x,int _y){
+	public Noeud(int _valeur){
 		this.valeur = _valeur;
-		this.x = _x;
-		this.y = _y;
 		this.evaluation = null;
 	}
-
+	/*
 	public void evaluer(int heuristique,Taquin tDeb,Taquin tFin){
 		
 		//Récupération des coordonnées de destination de la pièce
@@ -56,6 +43,7 @@ public class Noeud{
 				break;
 		}
 	}
+	*/
 
 	public void setValeur(int _valeur){
 		this.valeur = _valeur;
@@ -64,20 +52,7 @@ public class Noeud{
 		return this.valeur;
 	}
 
-	public void setX(int _x){
-		this.x = _x;
-	}
-	public int getX(){
-		return this.x;
-	}
 
-	public void setY(int _y){
-		this.y = _y;
-	}
-	public int getY(){
-		return this.y;
-	}
-	
 	public void setEvaluation(int _evaluation){
 		this.evaluation = _evaluation;
 	}
@@ -96,12 +71,10 @@ public class Noeud{
 		
 		Noeud n = (Noeud) o;
 		return ((this.valeur == n.valeur) && 
-				(this.x == n.x) && (this.y == n.y) && 
 				(this.evaluation == n.evaluation));
 	}
 	
 	public String toString(){
-		//return "[" + this.x + ", " + this.y + "] (" + this.valeur + ") " + this.evaluation;
 		return " "+this.valeur;
 	}
 
