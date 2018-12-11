@@ -35,7 +35,7 @@ public class Noeud{
 		this.evaluation = null;
 	}
 
-	public void evaluer(int heuristique, int xFin, int yFin){
+	public void evaluer(int heuristique, int xFin, int yFin,Taquin t){
 		switch (heuristique) {
 			//Valeur = 0
 			case 1 :
@@ -43,7 +43,8 @@ public class Noeud{
 				break;
 			//Pieces mal positionnées
 			case 2 : 
-
+				System.out.println("[DEBUG] Fonction getNbPieceMalPositionne() a créer dans la classe Taquin.java");
+				//this.evaluation = t.getNbPieceMalPositionne();
 				break;
 			//Distance Manhattan
 			case 3 :
