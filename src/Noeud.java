@@ -22,7 +22,7 @@ public class Noeud{
 	 * 	L'evaluation depend de l'heuristique choisie
 	 *	<p>
 	 */
-	private int evaluation;
+	private Integer evaluation;
 
 
 	/**
@@ -32,6 +32,7 @@ public class Noeud{
 		this.valeur = _valeur;
 		this.x = _x;
 		this.y = _y;
+		this.evaluation = null;
 	}
 
 
@@ -62,6 +63,9 @@ public class Noeud{
 	}
 	public int getEvaluation(){
 		return this.evaluation;
+	}
+	public String toString(){
+		return "[" + this.x + " , " + this.y + "]" + this.valeur + " " + this.evaluation;
 	}
 
 
