@@ -2,24 +2,28 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Taquin {
-	public Noeud[][] tab;
+	public Integer[][] tab;
+	public int evaluation;
 	
 	public Taquin() {
-		this.tab = new Noeud[3][3];
+		this.tab = new Integer[3][3];
 		this.initialiser();
+		this.evaluation = 0;
 	}
 	
-	public Taquin(Noeud[][] data) {
+	public Taquin(Integer[][] data) {
 		this.tab = data;
+		this.evaluation = 0;
 	}
 	
 	public Taquin(Taquin t) {
-		this.tab = new Noeud[3][3];
+		this.tab = new Integer[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				this.tab[i][j] = t.tab[i][j];
 			}
 		}
+		this.evaluation = t.evaluation;
 	}
 	
 	
@@ -43,15 +47,15 @@ public class Taquin {
 				}
 				
 				l.add(x);
-				this.tab[i][j] = new Noeud(x);
+				this.tab[i][j] = x;
 			}
 		}
 	}
 	
 	
 	/**
-	 * Renvoie le Noeud representant la case contenant l'entier valeur (passe en argument)
-	 * @return Noeud
+	 * Renvoie la position de la case contenant l'entier valeur (passe en argument)
+	 * @return tableau de 2 entiers
 	 */
 	public int[] getPositionNoeud(int valeur) {
 		int i = 0, j = 0;
@@ -61,7 +65,7 @@ public class Taquin {
 		while (!trouve && (i < 3)) {
 			j = 0;
 			while (!trouve && (j < 3)) {
-				if (this.tab[i][j].getValeur() == valeur) {
+				if (this.tab[i][j] == valeur) {
 					trouve = true;
 					res[0] = i;
 					res[1] = j;
@@ -83,7 +87,7 @@ public class Taquin {
 	 * @param j2 indice de la colonne de la case 2
 	 */
 	public void inverserCases(int i1, int j1, int i2, int j2) {
-		Noeud tmp = this.tab[i1][j1];
+		int tmp = this.tab[i1][j1];
 		this.tab[i1][j1] = this.tab[i2][j2];
 		this.tab[i2][j2] = tmp;
 	}
@@ -178,27 +182,21 @@ public class Taquin {
 		
 		return cpt;
 	}
+
 	
 	public void evaluer(Taquin tFin, int heuristique) {
-		for (int i = 0; i < this.tab.length; i++) {
-			for (Noeud n : this.tab[i]) {
-				evaluerNoeud(n, tFin, heuristique);
-			}
-		}
-	}
-	
-	public void evaluerNoeud(Noeud n, Taquin tFin, int heuristique) {
 		switch (heuristique) {
 		//Valeur = 0
 		case 1 :
-			n.setEvaluation(0);
+			this.evaluation = 0;
 			break;
 		//Pieces mal placees
 		case 2 : 
-			n.setEvaluation(this.getNbPieceMalPlacee(tFin));
+			this.evaluation = this.getNbPieceMalPlacee(tFin);
 			break;
 		//Distance Manhattan
 		case 3 :
+			/*
 			int pos[] = this.getPositionNoeud(n.getValeur());
 			int posFin[] = tFin.getPositionNoeud(n.getValeur());
 			
@@ -207,6 +205,7 @@ public class Taquin {
 			int xFin = posFin[0];
 			int yFin = posFin[1];
 			n.setEvaluation((xFin - x) + (yFin - y));
+			*/
 			break;
 		}
 	}
