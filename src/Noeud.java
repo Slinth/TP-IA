@@ -48,7 +48,7 @@ public class Noeud{
 				break;
 			//Pieces mal placees
 			case 2 : 
-				this.evaluation = tDeb.getNbPieceMalPlacee();
+				this.evaluation = tDeb.getNbPieceMalPlacee(tFin);
 				break;
 			//Distance Manhattan
 			case 3 :

@@ -50,10 +50,10 @@ public class Taquin {
 	
 	
 	/**
-	 * Renvoie le Noeud representant la case contenant 0 (i.e. case vide)
-	 * @return Noeud vide
+	 * Renvoie le Noeud representant la case contenant l'entier valeur (passe en argument)
+	 * @return Noeud
 	 */
-	public Noeud getCaseVide() {
+	public Noeud getNoeud(int valeur) {
 		int i = 0, j = 0;
 		boolean trouve = false;
 		Noeud res = new Noeud(0, -1, -1);
@@ -61,7 +61,7 @@ public class Taquin {
 		while (!trouve && (i < 3)) {
 			j = 0;
 			while (!trouve && (j < 3)) {
-				if (this.tab[i][j].getValeur() == 0) {
+				if (this.tab[i][j].getValeur() == valeur) {
 					trouve = true;
 					res.setX(i);
 					res.setY(j);
@@ -94,15 +94,8 @@ public class Taquin {
 	 * @return true si le Taquin t est identique au Taquin this, false sinon
 	 */
 	public boolean egaux(Taquin t) {
-		return ((this.tab[0][0].equals(t.tab[0][0])) &&
-				(this.tab[0][1].equals(t.tab[0][1])) &&
-				(this.tab[0][2].equals(t.tab[0][2])) &&
-				(this.tab[1][0].equals(t.tab[1][0])) &&
-				(this.tab[1][1].equals(t.tab[1][1])) &&
-				(this.tab[1][2].equals(t.tab[1][2])) &&
-				(this.tab[2][0].equals(t.tab[2][0])) &&
-				(this.tab[2][1].equals(t.tab[2][1])) &&
-				(this.tab[2][2].equals(t.tab[2][2])));
+		if (this.getNbPieceMalPlacee(t) == 0) return true;
+		return false;
 	}
 	
 	
@@ -113,7 +106,7 @@ public class Taquin {
 	public ArrayList<Taquin> calculerFils() {
 		ArrayList<Taquin> res = new ArrayList<Taquin>();
 		Taquin tmp;
-		Noeud vide = this.getCaseVide();
+		Noeud vide = this.getNoeud(0);
 		int x = vide.getX();
 		int y = vide.getY();
 		
@@ -166,49 +159,32 @@ public class Taquin {
 	
 	
 	/**
-	 * Indique si le Taquin this est gagnant
-	 * @return TRUE si this est gagnant, FALSE sinon
-	 */
-	public boolean estGagnant() {
-		if (this.getNbPieceMalPlacee() == 0) return true;
-		return false;
-	}
-	
-	
-	/**
 	 * Donne le nombre de pieces mal positionnees dans le Taquin this
 	 * @return Nombre de pieces pas a leur place
 	 */
-	public int getNbPieceMalPlacee() {
+	public int getNbPieceMalPlacee(Taquin t) {
 		int cpt = 0;
-		if (this.tab[0][0].getValeur() != 1) {
-			cpt++;
-		}
-		if (this.tab[0][1].getValeur() != 2) {
-			cpt++;
-		}
-		if (this.tab[0][2].getValeur() != 3) {
-			cpt++;
-		}
-		if (this.tab[1][0].getValeur() != 4) {
-			cpt++;
-		}
-		if (this.tab[1][1].getValeur() != 5) {
-			cpt++;
-		}
-		if (this.tab[1][2].getValeur() != 6) {
-			cpt++;
-		}
-		if (this.tab[2][0].getValeur() != 7) {
-			cpt++;
-		}
-		if (this.tab[2][1].getValeur() != 8) {
-			cpt++;
-		}
-		if (this.tab[2][2].getValeur() != 0) {
-			cpt++;
-		}
+		
+		if (!(this.tab[0][0].equals(t.tab[0][0]))) cpt++;
+		if (!(this.tab[0][1].equals(t.tab[0][1]))) cpt++;			
+		if (!(this.tab[0][2].equals(t.tab[0][2]))) cpt++;
+		if (!(this.tab[1][0].equals(t.tab[1][0]))) cpt++;
+		if (!(this.tab[1][1].equals(t.tab[1][1]))) cpt++;
+		if (!(this.tab[1][2].equals(t.tab[1][2]))) cpt++;
+		if (!(this.tab[2][0].equals(t.tab[2][0]))) cpt++;
+		if (!(this.tab[2][1].equals(t.tab[2][1]))) cpt++;
+		if (!(this.tab[2][2].equals(t.tab[2][2]))) cpt++;
+		
 		return cpt;
+	}
+	
+	public void miseAJour() {
+		for (int i = 0; i < this.tab.length; i++) {
+			for (Noeud n : this.tab[i]) {
+				//n.evaluer(heuristique, xFin, yFin, t);
+			}
+		}
+		
 	}
 	
 	public String toString() {
