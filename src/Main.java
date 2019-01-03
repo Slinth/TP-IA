@@ -24,17 +24,17 @@ public class Main {
 		
 		ouvert.add(debut);
 		
-		// Loop until you find the end
+		// Boucle tant qu'on a pas trouve le taquin final et que ouvert n'est pas vide
 		while (!ouvert.isEmpty() && (!trouve)) {			
-			// Get the current node (with the lowest f value)
+			// Recupere le taquin courant (avec la valeur de f minimale)
 			Taquin courant = ouvert.poll();
 			
 			//System.out.println(courant + "\n-----------------");
 			
-			// Add the current node to closed list
+			// Ajoute le taquin courant dans la liste ferme
 			ferme.add(courant);
 						
-			// Found the goal
+			// Taquin final trouve
 			if (courant.equals(fin)) {
 				System.out.println("TERMINE !");
 				trouve = true;
@@ -47,10 +47,10 @@ public class Main {
 				return chemin;
 			}
 			
-			// Generate children
+			// Generation des fils a partir du taquin courant
 			ArrayList<Taquin> lesFils = courant.calculerFils();
 			
-			// Loop through children
+			// Pour tous les fils generes
 			for (Taquin fils : lesFils) {
 				
 				/* VERSION 1 [MARCHE PAS]
@@ -82,9 +82,12 @@ public class Main {
 				
 				
 				/* VERSION 2 [MARCHE PEUT ETRE] */
+				
+				// Calcul des valeurs de g, h et f du prochain taquin potentiel
 				double tmpG = courant.g + 1;
 				double tmpH = fils.evaluer(fin, heuristique);
                 double tmpF = courant.g + tmpH;
+                
 				/*
 				if (ferme.contains(fils) && (tmpF >= fils.f)) {
 					continue;
@@ -101,13 +104,17 @@ public class Main {
 					ouvert.add(fils);
 				}*/
 				
+                // Si fils pas dans la liste ferme et si nouvelle valeur de f superieure a valeur courante
 				if (!(ferme.contains(fils) && (tmpF >= fils.f))) {
+					// Si fils n'est pas dans la liste ouvert
 					if (!ouvert.contains(fils)) {
+						// Affectation des nouvelles valeurs
 						fils.parent = courant;
 						fils.g = tmpG;
 						fils.f = tmpF;
 						fils.h = tmpH;
 						
+						// Ajout de fils a ouvert
 						ouvert.add(fils);
 					}
 				}
@@ -117,6 +124,11 @@ public class Main {
 		return chemin;
 	}
 	
+	
+	/**
+	 * Affiche une ArrayList de Taquin representant le chemin d'un taquin a un autre
+	 * @param res ArrayList<Taquin>
+	 */
 	public static void afficherChemin(ArrayList<Taquin> res) {
 		for (int i = res.size() - 1; i >= 0; i--){
 			System.out.println(res.get(i) + "\n----------------");

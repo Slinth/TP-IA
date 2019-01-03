@@ -198,7 +198,12 @@ public class Taquin {
 		return cpt;
 	}
 
-	
+	/**
+	 * Evalue (en fonction de l'heuristique choisie) et renvoie la distance du Taquin courant au Taquin tFin
+	 * @param tFin Taquin objectif
+	 * @param heuristique Entier representant l'heuristique choisie
+	 * @return Entier egal a la distance du Taquin courant au Taquin objectif
+	 */
 	public int evaluer(Taquin tFin, int heuristique) {
 		switch (heuristique) {
 		//Valeur = 0
@@ -223,6 +228,10 @@ public class Taquin {
 		}
 	}
 	
+
+	/**
+	 * Renvoie une chaine de caracteres representant le Taquin courant
+	 */
 	public String toString() {
 		return (  "| " + this.tab[0][0] + "   " + this.tab[0][1] + "   "  + this.tab[0][2]  + " |\n"
 				+ "| " + this.tab[1][0] + "   " + this.tab[1][1] + "   "  + this.tab[1][2]  + " |\n"
