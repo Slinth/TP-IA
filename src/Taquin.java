@@ -3,17 +3,26 @@ import java.util.Random;
 
 public class Taquin {
 	public Integer[][] tab;
-	public int evaluation;
+	public double g;
+	public double h;
+	public double f;
+	public Taquin parent;
 	
 	public Taquin() {
 		this.tab = new Integer[3][3];
 		this.initialiser();
-		this.evaluation = 0;
+		this.g = 0;
+		this.h = 0;
+		this.f = 0;
+		this.parent = null;
 	}
 	
 	public Taquin(Integer[][] data) {
 		this.tab = data;
-		this.evaluation = 0;
+		this.g = 0;
+		this.h= 0;
+		this.f = 0;
+		this.parent = null;
 	}
 	
 	public Taquin(Taquin t) {
@@ -23,7 +32,10 @@ public class Taquin {
 				this.tab[i][j] = t.tab[i][j];
 			}
 		}
-		this.evaluation = t.evaluation;
+		this.g = t.g;
+		this.h = t.h;
+		this.f = t.f;
+		this.parent = null;
 	}
 	
 	
@@ -42,6 +54,7 @@ public class Taquin {
 			for (int j = 0; j < 3; j++) {
 				int x = r.nextInt(9);
 				
+				// Si x deja distribue, generation d'une nouvelle valeur
 				while (l.contains(x)) {
 					x = r.nextInt(9);
 				}
@@ -186,27 +199,27 @@ public class Taquin {
 	}
 
 	
-	public void evaluer(Taquin tFin, int heuristique) {
+	public int evaluer(Taquin tFin, int heuristique) {
 		switch (heuristique) {
 		//Valeur = 0
 		case 1 :
-			this.evaluation = 0;
-			break;
+			return 0;
 		//Pieces mal placees
 		case 2 : 
-			this.evaluation += this.getNbPieceMalPlacee(tFin);
-			break;
+			return this.getNbPieceMalPlacee(tFin);
 		//Distance Manhattan
 		case 3 :
+			int tmp = 0;
 			for (int x = 0; x < this.tab.length; x++) {
 				for (int y = 0; y < this.tab.length; y++) {
 					int piece = this.tab[x][y];
 					int posFin[] = tFin.getPositionPiece(piece);
-					int eval = (posFin[0] - x) + (posFin[1] - y);
-					this.evaluation = eval;
+					tmp += (posFin[0] - x) + (posFin[1] - y);
 				}
 			}
-			break;
+			return tmp;
+		default :
+			return 0;
 		}
 	}
 	

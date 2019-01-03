@@ -1,99 +1,147 @@
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 public class Main {
 	
-
-	/**
-	 * 
-	 * @return 1 : Taquin final obtenu
-	 * @return 0 : Algorithme termine sans obtention du taquin final
-	 */
-	public static int algoA(Taquin tBase,Taquin tFinal) {
-		System.out.println("\nRésolution en cours ... ");
-
-		int nbDeplacements = 0;
-
-		ArrayList<Taquin> ouvert = new ArrayList<Taquin>();
-		ArrayList<Taquin> ferme = new ArrayList<Taquin>();
-
-		ouvert.add(tBase);
-
-		tBase.evaluation = 0;
-		System.out.println("Ajout dans Ouvert : \n"+tBase);
+	public static ArrayList<Taquin> AStar(Taquin debut, Taquin fin, int heuristique) {
+		boolean trouve = false;
+		ArrayList<Taquin> chemin = new ArrayList<Taquin>();
 		
-		while(ouvert.size()!=0){
-			System.out.println("-------------------");
-			System.out.println("Iter : " + nbDeplacements);
-			//Récupération du taquin avyant la plus faible évaluation dans ouvert
-			Taquin tMin = null;
-			for ( Taquin t : ouvert) {
-				if(tMin==null){
-					tMin=t;
-					System.out.println("tMin\n"+tMin);
+		// File de priorite triant les taquins par valeur de f croissante
+		PriorityQueue<Taquin> ouvert = new PriorityQueue<Taquin>(
+        		new Comparator<Taquin>() {
+                    @Override
+                    public int compare(Taquin t1, Taquin t2) {
+                        return Double.compare(t1.f, t2.f);
+                    }
+        });
+		
+		// Set de Taquin pour eviter les doublons
+		Set<Taquin> ferme = new HashSet<Taquin>();
+		
+		ouvert.add(debut);
+		
+		// Loop until you find the end
+		while (!ouvert.isEmpty() && (!trouve)) {			
+			// Get the current node (with the lowest f value)
+			Taquin courant = ouvert.poll();
+			
+			//System.out.println(courant + "\n-----------------");
+			
+			// Add the current node to closed list
+			ferme.add(courant);
+						
+			// Found the goal
+			if (courant.equals(fin)) {
+				System.out.println("TERMINE !");
+				trouve = true;
+				
+				// Backtrack pour trouver le chemin
+				while (courant != null) {
+					chemin.add(courant);
+					courant = courant.parent;
 				}
-				else if((t.evaluation>0)&&(t.evaluation<tMin.evaluation)){
-					tMin=t;
-					System.out.println("tMin\n"+tMin);
-				}
+				return chemin;
 			}
-			System.out.println("\n");
-
-			ferme.add(tMin);
-
-			//System.out.println("tMin:\n"+tMin+"\n");
-
-
-			ArrayList<Taquin> fils = tMin.calculerFils();
-
-			try{
-				for (Taquin t : fils ) {
-					t.evaluer(tFinal,2);
-					t.evaluation += nbDeplacements;
-					if(t.equals(tFinal))return 1;
-					
-					int indexT_ouvert = ouvert.indexOf(t);
-					int indexT_ferme = ferme.indexOf(t);
-
-					if((indexT_ouvert==-1)&&(indexT_ferme==-1)){
-						ouvert.add(t);
-					}
-					else if(indexT_ouvert!=-1){
-						Taquin k = ouvert.get(indexT_ouvert);
-						if(k.evaluation<t.evaluation){
-							ouvert.add(t);
-							ouvert.remove(k);
-						}
-					}else if(indexT_ferme!=-1){
-						Taquin k = ferme.get(indexT_ferme);
-						ferme.remove(k);
-						ouvert.add(t);
-					}
-					
-					//System.out.println(nbDeplacements+"\n"+t);
-					//System.out.println("\neval :"+t.evaluation);
+			
+			// Generate children
+			ArrayList<Taquin> lesFils = courant.calculerFils();
+			
+			// Loop through children
+			for (Taquin fils : lesFils) {
+				
+				/* VERSION 1 [MARCHE PAS]
+				// Child is on the closedList
+				if (ferme.contains(fils)) {
+					continue;
 				}
-				nbDeplacements ++;
-				Thread.sleep(2000);
-			}catch (Exception e) {
-				e.printStackTrace();
+				
+				// Create the f, g, and h values
+				fils.g = courant.g + 1;
+				fils.h = fils.evaluer(fin, heuristique);
+				fils.f = fils.g + fils.h;
+				
+				// Child is already in openList
+				if (ouvert.contains(fils)) {
+					int index = ouvert.indexOf(fils);
+					Taquin tmp = ouvert.get(index);
+					if (tmp.equals(fils) && (tmp.g < fils.g)) {
+						continue;
+					}
+				}
+				
+				// Add the child to the open list
+				if (!ouvert.contains(fils)) {
+					ouvert.add(fils);
+				}
+				*/
+				
+				
+				
+				/* VERSION 2 [MARCHE PEUT ETRE] */
+				double tmpG = courant.g + 1;
+				double tmpH = fils.evaluer(fin, heuristique);
+                double tmpF = courant.g + tmpH;
+				/*
+				if (ferme.contains(fils) && (tmpF >= fils.f)) {
+					continue;
+				} else if(!ouvert.contains(fils) || (tmpF < fils.f)) {
+					fils.parent = courant;
+					fils.g = tmpG;
+					fils.f = tmpF;
+					fils.h = tmpH;
+					
+					// Pour eviter les doublons dans la file de priorite
+					if (ouvert.contains(fils)) {
+						ouvert.remove(fils);
+					}
+					ouvert.add(fils);
+				}*/
+				
+				if (!(ferme.contains(fils) && (tmpF >= fils.f))) {
+					if (!ouvert.contains(fils)) {
+						fils.parent = courant;
+						fils.g = tmpG;
+						fils.f = tmpF;
+						fils.h = tmpH;
+						
+						ouvert.add(fils);
+					}
+				}
 			}
 		}
-
-		return 0;
+		
+		return chemin;
+	}
+	
+	public static void afficherChemin(ArrayList<Taquin> res) {
+		for (int i = res.size() - 1; i >= 0; i--){
+			System.out.println(res.get(i) + "\n----------------");
+		}
 	}
 	
 	public static void main(String[] args) {
-		Taquin tBase = new Taquin();
-		Taquin tFinal = new Taquin();
+//		Taquin tBase = new Taquin();
+//		Taquin tFinal = new Taquin();
 
-		tBase.evaluer(tFinal,2);
+		
+		Integer data[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+		Integer data2[][] = {{4, 1, 3}, {0, 2, 5}, {7, 8, 6}};
+		Taquin t1 = new Taquin(data);
+		Taquin t2 = new Taquin(data2);
 
-		System.out.println("Debut : \n"+tBase);
-		System.out.println("But : \n"+tFinal+"\n");
+		System.out.println("Debut : \n"+t1);
+		System.out.println("But : \n"+t2+"\n");
 		
-		System.out.println(algoA(tBase,tFinal));
+		ArrayList<Taquin> res = AStar(t1, t2, 2);
+				
+		System.out.println("\n--------------------\nPATH :");
+		afficherChemin(res);
 		
-		/*
+		/*	TESTS MANUELS
 		Taquin tBase = new Taquin();
 		Taquin tFinal = new Taquin();
 
@@ -121,7 +169,9 @@ public class Main {
 		
 		System.out.println(l.indexOf(t));
 		System.out.println(l.get(l.indexOf(t)));
-		//System.out.println(algoA(tBase,tFinal));
+		System.out.println(l.contains(t));
+		System.out.println(algoA(tBase,tFinal));
+		System.out.println(tBase.getNbPieceMalPlacee(tFinal));
 		 */
 	}
 }

@@ -78,6 +78,4 @@ public class Noeud{
 		return " "+this.valeur;
 	}
 
-
-
 }
