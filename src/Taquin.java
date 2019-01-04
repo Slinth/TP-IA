@@ -8,9 +8,9 @@ public class Taquin {
 	public double f;
 	public Taquin parent;
 	
-	public Taquin() {
-		this.tab = new Integer[3][3];
-		this.initialiser();
+	public Taquin(int dim) {
+		this.tab = new Integer[dim][dim];
+		this.initialiser(dim);
 		this.g = 0;
 		this.h = 0;
 		this.f = 0;
@@ -26,9 +26,10 @@ public class Taquin {
 	}
 	
 	public Taquin(Taquin t) {
-		this.tab = new Integer[3][3];
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		int dim = t.tab.length;
+		this.tab = new Integer[dim][dim];
+		for (int i = 0; i < dim; i++) {
+			for (int j = 0; j < dim; j++) {
 				this.tab[i][j] = t.tab[i][j];
 			}
 		}
@@ -42,7 +43,7 @@ public class Taquin {
 	/**
 	 * Initialise le taquin (3x3) de depart de maniere aleatoire
 	 */
-	public void initialiser() {
+	public void initialiser(int dim) {
 		Random r = new Random();
 		
 		// Permet de savoir quels entiers ont deja ete generes
@@ -50,9 +51,9 @@ public class Taquin {
 		
 		
 		// On genere un entier aleatoire entre 0 et 8 et on l'affecte pour chacune des cases (1 seule occurence par entier)
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				int x = r.nextInt(9);
+		for (int i = 0; i < dim; i++) {
+			for (int j = 0; j < dim; j++) {
+				int x = r.nextInt(dim*dim);
 				
 				// Si x deja distribue, generation d'une nouvelle valeur
 				while (l.contains(x)) {
@@ -75,9 +76,9 @@ public class Taquin {
 		boolean trouve = false;
 		int[] res = new int[2];
 		
-		while (!trouve && (i < 3)) {
+		while (!trouve && (i < this.tab.length)) {
 			j = 0;
-			while (!trouve && (j < 3)) {
+			while (!trouve && (j < this.tab.length)) {
 				if (this.tab[i][j] == valeur) {
 					trouve = true;
 					res[0] = i;
@@ -129,7 +130,8 @@ public class Taquin {
 		int pos[] = this.getPositionPiece(0);
 		int x = pos[0];
 		int y = pos[1];
-		
+		int xyMin = this.tab.length - 1;
+
 		// Si la case vide est sur la premiere ligne
 		if (x == 0) {
 			tmp = new Taquin(this);
@@ -137,13 +139,13 @@ public class Taquin {
 			res.add(tmp);
 		} else 
 			// Si la case vide est sur la derniere ligne
-			if (x == 2) {
+			if (x == xyMin) {
 				tmp = new Taquin(this);
 				tmp.inverserCases(x, y, x-1, y);
 				res.add(tmp);
-			} else
+			} else{
 				// Sinon
-				if (x == 1) {
+				//if (x == 1) {
 					tmp = new Taquin(this);
 					tmp.inverserCases(x, y, x-1, y);
 					res.add(tmp);
@@ -155,17 +157,19 @@ public class Taquin {
 		// Si la case vide est sur la premiere colonne
 		if (y == 0) {
 			tmp = new Taquin(this);
+
 			tmp.inverserCases(x, y, x, y+1);
 			res.add(tmp);
 		} else
 			// Si la case vide est sur la derniere colonne
-			if (y == 2) {
+			if (y == xyMin) {
 				tmp = new Taquin(this);
+
 				tmp.inverserCases(x, y, x, y-1);
 				res.add(tmp);
-			} else
+			} else{
 				// Sinon
-				if (y == 1) {
+				//if (y == 1) {
 					tmp = new Taquin(this);
 					tmp.inverserCases(x, y, x, y-1);
 					res.add(tmp);
@@ -173,7 +177,6 @@ public class Taquin {
 					tmp.inverserCases(x, y, x, y+1);
 					res.add(tmp);
 				}
-		
 		return res;
 	}
 	
@@ -184,17 +187,16 @@ public class Taquin {
 	 */
 	public int getNbPieceMalPlacee(Taquin t) {
 		int cpt = 0;
-		
-		if (!(this.tab[0][0].equals(t.tab[0][0]))) cpt++;
-		if (!(this.tab[0][1].equals(t.tab[0][1]))) cpt++;			
-		if (!(this.tab[0][2].equals(t.tab[0][2]))) cpt++;
-		if (!(this.tab[1][0].equals(t.tab[1][0]))) cpt++;
-		if (!(this.tab[1][1].equals(t.tab[1][1]))) cpt++;
-		if (!(this.tab[1][2].equals(t.tab[1][2]))) cpt++;
-		if (!(this.tab[2][0].equals(t.tab[2][0]))) cpt++;
-		if (!(this.tab[2][1].equals(t.tab[2][1]))) cpt++;
-		if (!(this.tab[2][2].equals(t.tab[2][2]))) cpt++;
-		
+		try{		
+			for(int i = 0 ; i < this.tab.length ; i++){
+				for(int j = 0 ; j < this.tab.length ; j++){
+					if (!(this.tab[i][j].equals(t.tab[i][j]))) cpt++;
+				}
+			}
+		}catch(NullPointerException e){
+			throw new NullPointerException("Les deux taquins n'ont pas la même dimension");
+		}
+
 		return cpt;
 	}
 
@@ -232,10 +234,15 @@ public class Taquin {
 	/**
 	 * Renvoie une chaine de caracteres representant le Taquin courant
 	 */
-	public String toString() {
-		return (  "| " + this.tab[0][0] + "   " + this.tab[0][1] + "   "  + this.tab[0][2]  + " |\n"
-				+ "| " + this.tab[1][0] + "   " + this.tab[1][1] + "   "  + this.tab[1][2]  + " |\n"
-				+ "| " + this.tab[2][0] + "   " + this.tab[2][1] + "   "  + this.tab[2][2]) + " |";
+	public String toString(){
+		String res = "";
+		for(int i = 0 ; i < this.tab.length ; i++){
+			for(int j = 0 ; j < this.tab.length ; j++){
+				res += " | " + this.tab[i][j];
+			}
+			res += "\n";
+		}
+		return res;
 	}
 	
 }

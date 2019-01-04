@@ -5,8 +5,11 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 public class Main {
-	
+	/**
+	 * Algorihtme a* pour taquin 3x3
+	 */
 	public static ArrayList<Taquin> AStar(Taquin debut, Taquin fin, int heuristique) {
+		int iter =0;
 		boolean trouve = false;
 		ArrayList<Taquin> chemin = new ArrayList<Taquin>();
 		
@@ -23,11 +26,12 @@ public class Main {
 		Set<Taquin> ferme = new HashSet<Taquin>();
 		
 		ouvert.add(debut);
-		
 		// Boucle tant qu'on a pas trouve le taquin final et que ouvert n'est pas vide
 		while (!ouvert.isEmpty() && (!trouve)) {			
 			// Recupere le taquin courant (avec la valeur de f minimale)
 			Taquin courant = ouvert.poll();
+
+			//System.out.println("\nDEBUG COURRANT : \n" + courant);
 			
 			//System.out.println(courant + "\n-----------------");
 			
@@ -46,12 +50,13 @@ public class Main {
 				}
 				return chemin;
 			}
-			
 			// Generation des fils a partir du taquin courant
 			ArrayList<Taquin> lesFils = courant.calculerFils();
-			
 			// Pour tous les fils generes
 			for (Taquin fils : lesFils) {
+				iter ++;
+				System.out.println(iter);
+
 				
 				/* VERSION 1 [MARCHE PAS]
 				// Child is on the closedList
@@ -124,7 +129,71 @@ public class Main {
 		return chemin;
 	}
 	
-	
+	public static ArrayList<Taquin> UniformCostSearch(Taquin debut, Taquin fin, int heuristique){
+
+		Taquin courant = debut;
+
+		boolean trouve = false;
+		boolean fini = false;
+		ArrayList<Taquin> visite = new ArrayList<Taquin>();
+		ArrayList<Taquin> chemin = new ArrayList<Taquin>();
+		chemin.add(debut);
+		int fTotal =0;
+		//Tq taquin fin n'est pas atteint et qu'il reste des possibilités
+		while((!trouve)&&(!fini)){
+			//Sélection du fils du courant le plus intéressant
+			ArrayList<Taquin> fils = courant.calculerFils();
+
+			// minF : minimum des evaluation / f : evaluation actuelle
+			Integer minF = null;
+			for ( Taquin tmp : fils ) {
+				if(!visite.contains(tmp)){
+					int f = tmp.evaluer(fin,heuristique);
+					if((minF==null)||(minF > f)){
+						minF = f;
+						courant = tmp;
+					}
+				}
+			}
+
+			visite.add(courant);
+
+			if(minF == null){
+				//Remonte au debut
+				courant = debut;
+
+				//Vérification que début a encore des fils exploitable
+				ArrayList<Taquin> debFils = courant.calculerFils();
+				
+				for ( Taquin tmp : visite ) {
+					if(debFils.contains(tmp))debFils.remove(tmp);
+				}
+
+				//Si plus de fils : fin de l'algo
+				if(debFils.size()<1){
+					fini = true;
+					System.out.println("Toutes les possibilités ont été exploités sans trouver de solutions");
+					System.out.println(visite.size()+" solutions testées");
+				}
+			}
+
+			int fC = courant.evaluer(fin,heuristique);
+			fTotal += fC;
+
+			chemin.add(courant);
+
+
+			//Vérification de la fin du parcours
+			if (courant.equals(fin)) {
+				System.out.println("TERMINE !" +fTotal);
+				trouve = true;
+				return chemin;
+			}
+		}
+
+		return null;
+
+	}
 	/**
 	 * Affiche une ArrayList de Taquin representant le chemin d'un taquin a un autre
 	 * @param res ArrayList<Taquin>
@@ -139,19 +208,34 @@ public class Main {
 //		Taquin tBase = new Taquin();
 //		Taquin tFinal = new Taquin();
 
-		
-		Integer data[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
-		Integer data2[][] = {{4, 1, 3}, {0, 2, 5}, {7, 8, 6}};
+		//Taquin 3x3
+		//Integer data[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+		//Integer data2[][] = {{4, 1, 3}, {0, 2, 5}, {7, 8, 6}};
+
+		//Taquin 4x4
+		Integer data[][] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
+		Integer data2[][] = {{2, 6, 10, 14},{1, 5, 9, 13},{3, 7, 11, 15},{0, 12, 8, 4}};
+		 
 		Taquin t1 = new Taquin(data);
 		Taquin t2 = new Taquin(data2);
+
+		//Taquin aléatoire
+		//Taquin t2 = new Taquin(4);
 
 		System.out.println("Debut : \n"+t1);
 		System.out.println("But : \n"+t2+"\n");
 		
 		ArrayList<Taquin> res = AStar(t1, t2, 2);
-				
-		System.out.println("\n--------------------\nPATH :");
-		afficherChemin(res);
+		if(res!=null){		
+			System.out.println("\n--------------------\nA*\nPATH :");
+			afficherChemin(res);
+		}
+		
+		// res = UniformCostSearch(t1, t2, 2);
+		// if(res!=null){		
+		// 	System.out.println("\n--------------------\nUniformCostSearch\nPATH :");
+		// 	afficherChemin(res);
+		// }
 		
 		/*	TESTS MANUELS
 		Taquin tBase = new Taquin();
