@@ -172,8 +172,8 @@ public class Main {
 				//Si plus de fils : fin de l'algo
 				if(debFils.size()<1){
 					fini = true;
-					System.out.println("Toutes les possibilités ont été exploités sans trouver de solutions");
-					System.out.println(visite.size()+" solutions testées");
+					System.out.println("Toutes les possibilites ont ete exploitees sans trouver de solutions");
+					System.out.println(visite.size()+" solutions testees");
 				}
 			}
 
@@ -183,7 +183,7 @@ public class Main {
 			chemin.add(courant);
 
 
-			//Vérification de la fin du parcours
+			//Verification de la fin du parcours
 			if (courant.equals(fin)) {
 				System.out.println("TERMINE !" +fTotal);
 				trouve = true;

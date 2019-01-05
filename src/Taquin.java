@@ -41,7 +41,7 @@ public class Taquin {
 	
 	
 	/**
-	 * Initialise le taquin (3x3) de depart de maniere aleatoire
+	 * Initialise le taquin (dim x dim) de depart de maniere aleatoire
 	 */
 	public void initialiser(int dim) {
 		Random r = new Random();
@@ -49,15 +49,16 @@ public class Taquin {
 		// Permet de savoir quels entiers ont deja ete generes
 		ArrayList<Integer> l = new ArrayList<Integer>();
 		
+		int maxInt = dim * dim - 1;
 		
-		// On genere un entier aleatoire entre 0 et 8 et on l'affecte pour chacune des cases (1 seule occurence par entier)
+		// On genere un entier aleatoire entre 0 et (dim x dim - 1) et on l'affecte pour chacune des cases (1 seule occurence par entier)
 		for (int i = 0; i < dim; i++) {
 			for (int j = 0; j < dim; j++) {
-				int x = r.nextInt(dim*dim);
+				int x = r.nextInt(maxInt);
 				
 				// Si x deja distribue, generation d'une nouvelle valeur
 				while (l.contains(x)) {
-					x = r.nextInt(9);
+					x = r.nextInt(maxInt);
 				}
 				
 				l.add(x);
@@ -130,7 +131,7 @@ public class Taquin {
 		int pos[] = this.getPositionPiece(0);
 		int x = pos[0];
 		int y = pos[1];
-		int xyMin = this.tab.length - 1;
+		int xyMax = this.tab.length - 1;
 
 		// Si la case vide est sur la premiere ligne
 		if (x == 0) {
@@ -139,7 +140,7 @@ public class Taquin {
 			res.add(tmp);
 		} else 
 			// Si la case vide est sur la derniere ligne
-			if (x == xyMin) {
+			if (x == xyMax) {
 				tmp = new Taquin(this);
 				tmp.inverserCases(x, y, x-1, y);
 				res.add(tmp);
@@ -157,12 +158,11 @@ public class Taquin {
 		// Si la case vide est sur la premiere colonne
 		if (y == 0) {
 			tmp = new Taquin(this);
-
 			tmp.inverserCases(x, y, x, y+1);
 			res.add(tmp);
 		} else
 			// Si la case vide est sur la derniere colonne
-			if (y == xyMin) {
+			if (y == xyMax) {
 				tmp = new Taquin(this);
 
 				tmp.inverserCases(x, y, x, y-1);
@@ -221,7 +221,7 @@ public class Taquin {
 				for (int y = 0; y < this.tab.length; y++) {
 					int piece = this.tab[x][y];
 					int posFin[] = tFin.getPositionPiece(piece);
-					tmp += (posFin[0] - x) + (posFin[1] - y);
+					tmp += Math.abs((posFin[0] - x) + (posFin[1] - y));
 				}
 			}
 			return tmp;
