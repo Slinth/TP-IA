@@ -9,7 +9,7 @@ public class Main {
 	 * Algorihtme a* pour taquin 3x3
 	 */
 	public static ArrayList<Taquin> AStar(Taquin debut, Taquin fin, int heuristique) {
-		int iter =0;
+		int iter = 0;
 		boolean trouve = false;
 		ArrayList<Taquin> chemin = new ArrayList<Taquin>();
 		
@@ -40,7 +40,7 @@ public class Main {
 						
 			// Taquin final trouve
 			if (courant.equals(fin)) {
-				System.out.println("TERMINE !");
+				//System.out.println("TERMINE !");
 				trouve = true;
 				
 				// Backtrack pour trouver le chemin
@@ -48,6 +48,12 @@ public class Main {
 					chemin.add(courant);
 					courant = courant.parent;
 				}
+				
+				System.out.println("SIZE FERME : " + ferme.size());
+				
+				int nbDeplacements = chemin.size() - 1;
+				System.out.println("NOMBRE DE DEPLACEMENTS : " + nbDeplacements);
+				System.out.println("ITER : " + iter);
 				return chemin;
 			}
 			// Generation des fils a partir du taquin courant
@@ -55,59 +61,12 @@ public class Main {
 			// Pour tous les fils generes
 			for (Taquin fils : lesFils) {
 				iter ++;
-				System.out.println(iter);
-
-				
-				/* VERSION 1 [MARCHE PAS]
-				// Child is on the closedList
-				if (ferme.contains(fils)) {
-					continue;
-				}
-				
-				// Create the f, g, and h values
-				fils.g = courant.g + 1;
-				fils.h = fils.evaluer(fin, heuristique);
-				fils.f = fils.g + fils.h;
-				
-				// Child is already in openList
-				if (ouvert.contains(fils)) {
-					int index = ouvert.indexOf(fils);
-					Taquin tmp = ouvert.get(index);
-					if (tmp.equals(fils) && (tmp.g < fils.g)) {
-						continue;
-					}
-				}
-				
-				// Add the child to the open list
-				if (!ouvert.contains(fils)) {
-					ouvert.add(fils);
-				}
-				*/
-				
-				
-				
-				/* VERSION 2 [MARCHE PEUT ETRE] */
+				//System.out.println(iter);
 				
 				// Calcul des valeurs de g, h et f du prochain taquin potentiel
 				double tmpG = courant.g + 1;
 				double tmpH = fils.evaluer(fin, heuristique);
                 double tmpF = courant.g + tmpH;
-                
-				/*
-				if (ferme.contains(fils) && (tmpF >= fils.f)) {
-					continue;
-				} else if(!ouvert.contains(fils) || (tmpF < fils.f)) {
-					fils.parent = courant;
-					fils.g = tmpG;
-					fils.f = tmpF;
-					fils.h = tmpH;
-					
-					// Pour eviter les doublons dans la file de priorite
-					if (ouvert.contains(fils)) {
-						ouvert.remove(fils);
-					}
-					ouvert.add(fils);
-				}*/
 				
                 // Si fils pas dans la liste ferme et si nouvelle valeur de f superieure a valeur courante
 				if (!(ferme.contains(fils) && (tmpF >= fils.f))) {
@@ -128,6 +87,111 @@ public class Main {
 		
 		return chemin;
 	}
+	
+	public static ArrayList<Taquin> AStarV2(Taquin debut, Taquin fin, int heuristique) {
+		// Contiendra le chemin utilise pour trouver la solution
+		ArrayList<Taquin> chemin = new ArrayList<Taquin>();
+		
+		// Liste tampom utilisee pour empecher les exceptions de modifications concurrentes
+		ArrayList<Taquin> listTmp;
+		
+		// Permet de mettre fin a l'algo quand la solution est trouvee
+		boolean trouve = false;
+		
+		// Nombre de noeuds parcourus
+		int iter = 0;
+		
+		// File de priorite triant les taquins par valeur de f croissante
+		PriorityQueue<Taquin> ouvert = new PriorityQueue<Taquin>(
+			new Comparator<Taquin>() {
+	            @Override
+	            public int compare(Taquin t1, Taquin t2) {
+	                return Double.compare(t1.f, t2.f);
+	            }
+		});
+				
+		// Set de Taquin pour eviter les doublons
+		Set<Taquin> ferme = new HashSet<Taquin>();
+		
+		ouvert.add(debut);
+		
+		while (!ouvert.isEmpty() && !trouve) {
+			// Recupere le taquin courant (avec la valeur de f minimale)
+			Taquin courant = ouvert.poll();
+			
+			// Ajoute le taquin courant dans la liste ferme
+			ferme.add(courant);
+			
+			// Generation des fils a partir du taquin courant
+			ArrayList<Taquin> lesFils = courant.calculerFils();
+			
+			// Pour tous les fils generes
+			for (Taquin fils : lesFils) {
+				fils.parent = courant;
+				fils.g = courant.g + 1;
+				fils.h = fils.evaluer(fin, heuristique);
+				fils.f = fils.g + fils.h;
+				
+				iter++;
+				
+				if (fils.equals(fin)) {
+					trouve = true;
+					
+					// Backtrack pour trouver le chemin
+					while (fils != null) {
+						chemin.add(fils);
+						fils = fils.parent;
+					}
+					
+					int nbDeplacements = chemin.size() - 1;
+					
+					System.out.println("SIZE FERME : " + ferme.size());
+					System.out.println("NOMBRE DE DEPLACEMENTS : " + nbDeplacements);
+					System.out.println("ITER : " + iter);
+					return chemin;
+				}
+				
+				if (!ouvert.contains(fils) && !ferme.contains(fils)) {
+					ouvert.add(fils);
+				}
+				
+				if (ouvert.contains(fils)) {
+					listTmp = new ArrayList<Taquin>();
+					listTmp.addAll(ouvert);
+					
+					for (Taquin t : listTmp) {
+						if (fils.equals(t)) {
+							if (t.f < fils.f) {
+								continue;
+							} else {
+								ouvert.remove(t);
+								ouvert.add(fils);
+							}
+						}
+					}
+				}
+				
+				if (ferme.contains(fils)) {
+					listTmp = new ArrayList<Taquin>();
+					listTmp.addAll(ferme);
+					
+					for (Taquin t : listTmp) {
+						if (fils.equals(t)) {
+							if (t.f < fils.f) {
+								continue;
+							} else {
+								ferme.remove(t);
+								ouvert.add(fils);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return chemin;
+	}
+	
 	
 	public static ArrayList<Taquin> UniformCostSearch(Taquin debut, Taquin fin, int heuristique){
 
@@ -213,23 +277,32 @@ public class Main {
 		//Integer data2[][] = {{4, 1, 3}, {0, 2, 5}, {7, 8, 6}};
 
 		//Taquin 4x4
-		Integer data[][] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
-		Integer data2[][] = {{2, 6, 10, 14},{1, 5, 9, 13},{3, 7, 11, 15},{0, 12, 8, 4}};
+		//Integer data[][] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
+		//Integer data2[][] = {{2, 6, 10, 14},{1, 5, 9, 13},{3, 7, 11, 15},{0, 12, 8, 4}};
+		
+		// Taquin Matthieu
+		Integer data[][] = {{4, 1, 2, 3}, {5, 13, 9, 7}, {12, 10, 6, 11}, {8, 0, 14, 15}};
+		Integer data2[][] = {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
 		 
 		Taquin t1 = new Taquin(data);
 		Taquin t2 = new Taquin(data2);
 
-		//Taquin aléatoire
+		//Taquin aleatoire
 		//Taquin t2 = new Taquin(4);
 
 		System.out.println("Debut : \n"+t1);
 		System.out.println("But : \n"+t2+"\n");
 		
-		ArrayList<Taquin> res = AStar(t1, t2, 2);
-		if(res!=null){		
-			System.out.println("\n--------------------\nA*\nPATH :");
-			afficherChemin(res);
-		}
+		
+		System.out.println("V1 :");
+		AStar(t1, t2, 3);
+		
+		System.out.println("\nV2 :");
+		ArrayList<Taquin> res = AStarV2(t1, t2, 3);
+//		if(res!=null){		
+//			System.out.println("\n--------------------\nA*\nPATH :");
+//			afficherChemin(res);
+//		}
 		
 		// res = UniformCostSearch(t1, t2, 2);
 		// if(res!=null){		

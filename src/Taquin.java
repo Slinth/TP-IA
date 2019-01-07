@@ -199,6 +199,23 @@ public class Taquin {
 
 		return cpt;
 	}
+	
+	/**
+	 * Renvoie la somme des distances de Manhattan entre le Taquin this et le Taquin t
+	 * @return Somme des distance de Manhattan
+	 */
+	public int getSommeManhattan(Taquin t) {
+		int res = 0;
+		
+		for (int x = 0; x < this.tab.length; x++) {
+			for (int y = 0; y < this.tab.length; y++) {
+				int piece = this.tab[x][y];
+				int posFin[] = t.getPositionPiece(piece);
+				res += Math.abs((posFin[0] - x)) + Math.abs((posFin[1] - y));
+			}
+		}
+		return res;
+	}
 
 	/**
 	 * Evalue (en fonction de l'heuristique choisie) et renvoie la distance du Taquin courant au Taquin tFin
@@ -216,20 +233,12 @@ public class Taquin {
 			return this.getNbPieceMalPlacee(tFin);
 		//Distance Manhattan
 		case 3 :
-			int tmp = 0;
-			for (int x = 0; x < this.tab.length; x++) {
-				for (int y = 0; y < this.tab.length; y++) {
-					int piece = this.tab[x][y];
-					int posFin[] = tFin.getPositionPiece(piece);
-					tmp += Math.abs((posFin[0] - x) + (posFin[1] - y));
-				}
-			}
-			return tmp;
+			return this.getSommeManhattan(tFin);
 		default :
 			return 0;
 		}
 	}
-	
+
 
 	/**
 	 * Renvoie une chaine de caracteres representant le Taquin courant
