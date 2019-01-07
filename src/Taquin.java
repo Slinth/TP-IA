@@ -254,4 +254,104 @@ public class Taquin {
 		return res;
 	}
 	
+
+	/**
+	 * Mélange le taquin
+	 * @param nbMouv Nombre de déplacements a effectuer
+	 */
+	public void melange(int nbMouv){
+		//Borne du tableau
+		int borneMax = this.tab.length-1;
+		
+		//Position actuelle de la pièce
+		int[] posPiece;
+		
+		//Nombre de déplacement possibles
+		int nbTrue;
+
+		//Position des nouvelles pièces après les déplacements
+		int[] posPieceGauche = new int[2];
+		int[] posPieceDroite = new int[2];
+		int[] posPieceHaut = new int[2];
+		int[] posPieceBas = new int[2];
+
+		//Dernier déplacement (afin déviter les retour)
+		int lastMove = -1;
+
+		//Liste des déplacements possibles (0 : Gauche , 1 : Haut , 2 : Droite , 3 : Bas)
+		ArrayList<Integer> possible = new ArrayList<Integer>();
+
+		//Effectue les déplacements
+		for(int i = 0 ; i < nbMouv ; i++){
+			
+			//Initialisation
+			possible.clear();
+			for (int j = 0 ; j < 4 ; j++ ){
+				posPieceGauche[0] = 0;
+				posPieceGauche[1] = 0;
+				posPieceDroite[0] = 0;
+				posPieceDroite[1] = 0;
+				posPieceHaut[0] = 0;
+				posPieceHaut[1] = 0;
+				posPieceBas[0] = 0;
+				posPieceBas[1] = 0;
+			}
+
+
+			//Récupération de la position actuelle
+			posPiece = this.getPositionPiece(0);
+
+			//Calcul des position des pièces après chaque déplacement probable
+			posPieceGauche[0] = posPiece[0];
+			posPieceGauche[1] = posPiece[1] - 1;
+
+			posPieceDroite[0] = posPiece[0];
+			posPieceDroite[1] = posPiece[1] + 1;
+
+			posPieceHaut[0] = posPiece[0] - 1;
+			posPieceHaut[1] = posPiece[1];
+
+			posPieceBas[0] = posPiece[0] + 1;
+			posPieceBas[1] = posPiece[1];
+
+			//Vérification de la possibilité des déplacement (vérification que les positions ne sortent pas du tableau)
+			if((posPieceGauche[0] <= borneMax)&&(posPieceGauche[1] <= borneMax)&&(posPieceGauche[0] >= 0)&&(posPieceGauche[1] >= 0)){
+				if(lastMove!=2)possible.add(0);
+			}
+			if((posPieceHaut[0] <= borneMax)&&(posPieceHaut[1] <= borneMax)&&(posPieceHaut[0] >= 0)&&(posPieceHaut[1] >= 0)){
+				if(lastMove!=3)possible.add(1);
+			}
+			if((posPieceDroite[0] <= borneMax)&&(posPieceDroite[1] <= borneMax)&&(posPieceDroite[0] >= 0)&&(posPieceDroite[1] >= 0)){
+				if(lastMove!=0)possible.add(2);
+			}
+			if((posPieceBas[0] <= borneMax)&&(posPieceBas[1] <= borneMax)&&(posPieceBas[0] >= 0)&&(posPieceBas[1] >= 0)){
+				if(lastMove!=1)possible.add(3);
+			}
+
+			//Choix aléatoire du déplacement parmis les déplacement possibles
+			nbTrue = possible.size();
+			Random r = new Random();
+			int choix = r.nextInt(nbTrue);
+			lastMove = possible.get(choix);
+
+			switch (possible.get(choix)) {
+				case 0 : 
+					//Gauche
+					this.inverserCases(posPiece[0],posPiece[1],posPieceGauche[0],posPieceGauche[1]);
+					break;
+				case 1 : 
+					//Haut
+					this.inverserCases(posPiece[0],posPiece[1],posPieceHaut[0],posPieceHaut[1]);
+					break;
+				case 2 : 
+					//Droite
+					this.inverserCases(posPiece[0],posPiece[1],posPieceDroite[0],posPieceDroite[1]);
+					break;
+				case 3 : 
+					//Gauche
+					this.inverserCases(posPiece[0],posPiece[1],posPieceBas[0],posPieceBas[1]);
+					break;
+			}
+		}
+	}
 }
