@@ -267,6 +267,82 @@ public class Main {
 			System.out.println(res.get(i) + "\n----------------");
 		}
 	}
+
+	public static class Result{
+		public boolean found;
+		public Integer f;
+		public ArrayList<Taquin> chemin;
+
+		public Result(){
+			found = false;
+			f = null;
+			chemin = null;
+		}
+	}
+
+
+	public static void IDAStar(Taquin debut,Taquin fin,int heuristique){
+		int h = debut.evaluer(fin,heuristique);
+		ArrayList<Taquin> chemin = new ArrayList<Taquin>();
+		while(true){
+			Result tmp = recherche(debut,0,h,fin,heuristique,chemin);
+			if(tmp.found == true ){
+				afficherChemin(tmp.chemin);
+				System.out.println("Fin");
+				return;
+			}else if (tmp.f == Integer.MAX_VALUE){
+				System.out.println("Not found");
+				return;
+			}
+			h = tmp.f;
+		}
+	}
+
+	public static Result recherche(Taquin t,int g,int h,Taquin fin, int heuristique,ArrayList<Taquin> chemin){
+		int heuristiqueVal = t.evaluer(fin,heuristique);
+		Integer f = g + heuristiqueVal;
+	
+		if(f>h){
+			Result res = new Result();
+			res.f = f;
+			res.chemin = chemin;
+			return res;
+		}
+
+		if(t.equals(fin)){
+			Result res = new Result();
+			res.chemin = chemin;
+			res.found = true;
+			res.chemin = chemin;
+			return res;
+		}
+
+		Integer min = Integer.MAX_VALUE;
+
+		ArrayList<Taquin> fils = t.calculerFils();
+		Result res = new Result();
+		for (Taquin tmp : fils ) {
+			if(!chemin.contains(tmp)){
+				chemin.add(tmp);
+				Result temp =  recherche(tmp,g+1,h,fin,heuristique,chemin);
+				if(temp.found == true ){
+					res.found = true;
+					res.chemin = chemin;
+					return res;
+				}
+				if(temp.f<min){
+					min = temp.f;
+					res.f = min;
+					
+				}
+				chemin.remove(chemin.size()-1);
+				res.chemin = chemin;
+			}
+		}
+		
+		//System.out.println(res.t);
+		return res;
+	}
 	
 	public static void main(String[] args) {
 //		Taquin tBase = new Taquin();
@@ -294,11 +370,13 @@ public class Main {
 		System.out.println("But : \n"+t2+"\n");
 		
 		
-		System.out.println("V1 :");
-		AStar(t1, t2, 3);
+		//System.out.println("V1 :");
+		//AStar(t1, t2, 3);
 		
-		System.out.println("\nV2 :");
-		ArrayList<Taquin> res = AStarV2(t1, t2, 3);
+		//System.out.println("\nV2 :");
+		//ArrayList<Taquin> res = AStarV2(t1, t2, 3);
+		//
+		IDAStar(t1,t2,2);
 //		if(res!=null){		
 //			System.out.println("\n--------------------\nA*\nPATH :");
 //			afficherChemin(res);
