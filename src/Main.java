@@ -201,10 +201,16 @@ public class Main {
 		boolean fini = false;
 		ArrayList<Taquin> visite = new ArrayList<Taquin>();
 		ArrayList<Taquin> chemin = new ArrayList<Taquin>();
+		int iter = 0;
+		
+		
 		chemin.add(debut);
-		int fTotal =0;
+		int fTotal = 0;
+		
 		//Tq taquin fin n'est pas atteint et qu'il reste des possibilités
 		while((!trouve)&&(!fini)){
+			iter++;
+			
 			//Sélection du fils du courant le plus intéressant
 			ArrayList<Taquin> fils = courant.calculerFils();
 
@@ -251,6 +257,10 @@ public class Main {
 			if (courant.equals(fin)) {
 				System.out.println("TERMINE !" +fTotal);
 				trouve = true;
+				
+				int nbDeplacements = chemin.size() - 1;
+				System.out.println("NOMBRE DE DEPLACEMENTS : " + nbDeplacements);
+				System.out.println("ITER : " + iter);
 				return chemin;
 			}
 		}
@@ -330,15 +340,15 @@ public class Main {
 					res.chemin = chemin;
 					return res;
 				}
+
 				if(temp.f<min){
 					min = temp.f;
-					res.f = min;
-					
 				}
 				chemin.remove(chemin.size()-1);
 				res.chemin = chemin;
 			}
 		}
+		res.f = min;
 		
 		//System.out.println(res.t);
 		return res;
@@ -356,19 +366,26 @@ public class Main {
 		//Integer data[][] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
 		//Integer data2[][] = {{2, 6, 10, 14},{1, 5, 9, 13},{3, 7, 11, 15},{0, 12, 8, 4}};
 		
-		// Taquin Matthieu
-		Integer data[][] = {{4, 1, 2, 3}, {5, 13, 9, 7}, {12, 10, 6, 11}, {8, 0, 14, 15}};
-		Integer data2[][] = {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
+		//Taquin Matthieu
+		//Integer data[][] = {{4, 1, 2, 3}, {5, 13, 9, 7}, {12, 10, 6, 11}, {8, 0, 14, 15}};
+		//Integer data2[][] = {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
 		 
-		Taquin t1 = new Taquin(data);
-		Taquin t2 = new Taquin(data2);
+//		Taquin t1 = new Taquin(data);
+//		Taquin t2 = new Taquin(data2);
 
 		//Taquin aleatoire
 		//Taquin t2 = new Taquin(4);
+		
+		//Taquin ordonne
+		Taquin t2 = new Taquin(3);
+		Taquin t1 = new Taquin(t2);
+		t1.melange(30);
 
 		System.out.println("Debut : \n"+t1);
 		System.out.println("But : \n"+t2+"\n");
 		
+		//System.out.println("A* (h2) :");
+		//AStar(t1, t2, 2);
 		
 		//System.out.println("V1 :");
 		//AStar(t1, t2, 3);
@@ -377,6 +394,21 @@ public class Main {
 		//ArrayList<Taquin> res = AStarV2(t1, t2, 3);
 		//
 		IDAStar(t1,t2,2);
+
+		//System.out.println("\nA* (h3) :");
+		//AStar(t1, t2, 3);
+		
+//		System.out.println("\nV2 :");
+//		ArrayList<Taquin> res = AStarV2(t1, t2, 3);
+		
+		// System.out.println("\nUniform (h2) :");
+		// UniformCostSearch(t1, t2, 2);
+		
+		// System.out.println("\nUniform (h3) :");
+		// UniformCostSearch(t1, t2, 3);
+		
+		
+		
 //		if(res!=null){		
 //			System.out.println("\n--------------------\nA*\nPATH :");
 //			afficherChemin(res);
@@ -420,5 +452,6 @@ public class Main {
 		System.out.println(algoA(tBase,tFinal));
 		System.out.println(tBase.getNbPieceMalPlacee(tFinal));
 		 */
+		
 	}
 }

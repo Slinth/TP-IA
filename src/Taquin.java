@@ -10,7 +10,7 @@ public class Taquin {
 	
 	public Taquin(int dim) {
 		this.tab = new Integer[dim][dim];
-		this.initialiser(dim);
+		this.initialiserOrdre(dim);
 		this.g = 0;
 		this.h = 0;
 		this.f = 0;
@@ -63,6 +63,16 @@ public class Taquin {
 				
 				l.add(x);
 				this.tab[i][j] = x;
+			}
+		}
+	}
+	
+	public void initialiserOrdre(int dim) {
+		int tmp = 0;
+		for (int i = 0; i < dim; i++) {
+			for (int j = 0; j < dim; j++) {
+				this.tab[i][j] = tmp;
+				tmp++;
 			}
 		}
 	}
@@ -256,8 +266,8 @@ public class Taquin {
 	
 
 	/**
-	 * Mélange le taquin
-	 * @param nbMouv Nombre de déplacements a effectuer
+	 * Melange le taquin
+	 * @param nbMouv Nombre de delacements a effectuer
 	 */
 	public void melange(int nbMouv){
 		//Borne du tableau
@@ -266,42 +276,31 @@ public class Taquin {
 		//Position actuelle de la pièce
 		int[] posPiece;
 		
-		//Nombre de déplacement possibles
+		//Nombre de deplacement possibles
 		int nbTrue;
 
-		//Position des nouvelles pièces après les déplacements
+		//Position des nouvelles pieces apres les deplacements
 		int[] posPieceGauche = new int[2];
 		int[] posPieceDroite = new int[2];
 		int[] posPieceHaut = new int[2];
 		int[] posPieceBas = new int[2];
 
-		//Dernier déplacement (afin déviter les retour)
+		//Dernier deplacement (afin d eviter les retour)
 		int lastMove = -1;
 
-		//Liste des déplacements possibles (0 : Gauche , 1 : Haut , 2 : Droite , 3 : Bas)
+		//Liste des deplacements possibles (0 : Gauche , 1 : Haut , 2 : Droite , 3 : Bas)
 		ArrayList<Integer> possible = new ArrayList<Integer>();
 
-		//Effectue les déplacements
+		//Effectue les deplacements
 		for(int i = 0 ; i < nbMouv ; i++){
 			
 			//Initialisation
 			possible.clear();
-			for (int j = 0 ; j < 4 ; j++ ){
-				posPieceGauche[0] = 0;
-				posPieceGauche[1] = 0;
-				posPieceDroite[0] = 0;
-				posPieceDroite[1] = 0;
-				posPieceHaut[0] = 0;
-				posPieceHaut[1] = 0;
-				posPieceBas[0] = 0;
-				posPieceBas[1] = 0;
-			}
 
-
-			//Récupération de la position actuelle
+			//Recuperation de la position actuelle
 			posPiece = this.getPositionPiece(0);
 
-			//Calcul des position des pièces après chaque déplacement probable
+			//Calcul des position des pieces apres chaque deplacement probable
 			posPieceGauche[0] = posPiece[0];
 			posPieceGauche[1] = posPiece[1] - 1;
 
@@ -314,7 +313,7 @@ public class Taquin {
 			posPieceBas[0] = posPiece[0] + 1;
 			posPieceBas[1] = posPiece[1];
 
-			//Vérification de la possibilité des déplacement (vérification que les positions ne sortent pas du tableau)
+			//Verification de la possibilite des deplacement (verification que les positions ne sortent pas du tableau)
 			if((posPieceGauche[0] <= borneMax)&&(posPieceGauche[1] <= borneMax)&&(posPieceGauche[0] >= 0)&&(posPieceGauche[1] >= 0)){
 				if(lastMove!=2)possible.add(0);
 			}
@@ -328,7 +327,7 @@ public class Taquin {
 				if(lastMove!=1)possible.add(3);
 			}
 
-			//Choix aléatoire du déplacement parmis les déplacement possibles
+			//Choix aleatoire du deplacement parmis les deplacement possibles
 			nbTrue = possible.size();
 			Random r = new Random();
 			int choix = r.nextInt(nbTrue);
